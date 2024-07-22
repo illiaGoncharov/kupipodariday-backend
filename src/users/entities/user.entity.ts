@@ -67,7 +67,6 @@ export class User {
   @IsNotEmpty()
   password: string;
 
-  @Column()
   @OneToMany(() => Wish, (wish) => wish.owner)
   wishes: Wish[];
 

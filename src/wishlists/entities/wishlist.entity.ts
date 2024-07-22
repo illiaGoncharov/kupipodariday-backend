@@ -5,11 +5,13 @@ import {
   UpdateDateColumn,
   Column,
   OneToMany,
+  ManyToOne,
 } from 'typeorm';
 
 import { IsString, IsUrl, Length } from 'class-validator';
 
 import { Wish } from 'src/wishes/entities/wish.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Entity()
 export class Wishlist {
@@ -17,7 +19,7 @@ export class Wishlist {
   id: number;
 
   @CreateDateColumn()
-  createAt: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
@@ -44,5 +46,8 @@ export class Wishlist {
   image: string;
 
   @OneToMany(() => Wish, (wish) => wish.id)
-  items: Wish[];
+  items: Wish[]; // Список желаемых вещей в этом списке
+
+  @ManyToOne(() => User, (user) => user.wishlists)
+  owner: User; // Владелец списка желаемого
 }

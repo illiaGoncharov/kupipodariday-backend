@@ -9,13 +9,15 @@ import { UsersModule } from './users/users.module';
 import { WishesModule } from './wishes/wishes.module';
 import { WishlistsModule } from './wishlists/wishlists.module';
 
+import { AuthModule } from './auth/auth.module';
+
 @Module({
   imports: [
     UsersModule,
     OffersModule,
     WishesModule,
     WishlistsModule,
-
+    AuthModule,
     // Настройка подключения к базе данных PostgreSQL с использованием TypeORM
     TypeOrmModule.forRoot({
       type: 'postgres',
