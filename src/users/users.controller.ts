@@ -5,38 +5,62 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
+
+import { Request as IRequest } from 'express';
+
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
+import { UserProfileResponseDto } from './dto/user-profile-response.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { FindUsersDto } from './dto/find-users.dto';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+
+interface RequestOneUser extends IRequest {
+  user: UserProfileResponseDto;
+}
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  findOne(@Req() req: RequestOneUser) {
+    return req.user;
   }
 
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
+  @UseGuards(JwtAuthGuard)
+  @Patch('me')
+  async updateOne(
+    @Req() req: RequestOneUser,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return await this.usersService.updateOne(req.user.id, updateUserDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  @UseGuards(JwtAuthGuard)
+  @Get('me/wishes')
+  async findOneUserWishes(@Req() req: RequestOneUser) {
+    return await this.usersService.findOneUserWishes(req.user.id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  @UseGuards(JwtAuthGuard)
+  @Get(':username')
+  async getUser(@Param('username') username: string) {
+    return await this.usersService.getUser(username);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  @UseGuards(JwtAuthGuard)
+  @Get(':username/wishes')
+  async getUserWishes(@Param('username') username: string) {
+    return await this.usersService.getUserWishes(username);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('find')
+  async findMany(@Body() findUsersDto: FindUsersDto) {
+    return await this.usersService.findMany(findUsersDto.query);
   }
 }

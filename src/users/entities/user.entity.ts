@@ -6,6 +6,7 @@ import {
   Column,
   OneToMany,
 } from 'typeorm';
+// Импорт декораторов TypeORM
 
 import { IsEmail, IsNotEmpty, IsString, IsUrl, Length } from 'class-validator';
 
@@ -19,7 +20,7 @@ export class User {
   id: number;
 
   @CreateDateColumn()
-  createAt: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
   updatedAt: Date;
@@ -37,7 +38,7 @@ export class User {
   @Column({
     type: 'varchar',
     length: 200,
-    default: 'Пока ничего не рассказал о себе',
+    default: 'Расскажи о себе',
   })
   @IsString()
   @Length(2, 200)

@@ -19,12 +19,12 @@ import { WishlistsModule } from './wishlists/wishlists.module';
     // Настройка подключения к базе данных PostgreSQL с использованием TypeORM
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: '127.0.0.1',
       port: 5432,
       username: 'student',
       password: 'student',
       database: 'nest_project',
-      entities: [], // Здесь можно указать сущности (entities) для TypeORM
+      entities: ['dist/*/entities/*.entity.js'], // Здесь можно указать сущности (entities) для TypeORM
       synchronize: true, // Автоматически синхронизировать схему базы данных с сущностями
     }),
   ],
